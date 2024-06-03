@@ -100,9 +100,12 @@ export abstract class RetrievalResponse<M extends Model = Model> extends Respons
                 let r: Model[] = [];
                 if (relatedStubs) {
                     for (let stub of relatedStubs) {
-                        let relatedDoc: Resource = this.resourceIndex.get(stub.type).get(stub.id);
-                        let relatedModel: Model = this.indexAsModel(relatedDoc, relation.getType(), includeSubtree);
-                        r.push(relatedModel);
+                        let typeMap = this.resourceIndex.get(stub.type);
+                        if (typeMap) {
+                            let relatedDoc: Resource = this.resourceIndex.get(stub.type).get(stub.id);
+                            let relatedModel: Model = this.indexAsModel(relatedDoc, relation.getType(), includeSubtree);
+                            r.push(relatedModel);
+                        }
                     }
                 }
                 model.setRelation(modelRelationName, r);
